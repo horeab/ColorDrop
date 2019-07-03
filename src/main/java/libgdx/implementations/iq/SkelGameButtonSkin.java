@@ -8,6 +8,17 @@ import libgdx.resources.Res;
 
 public enum SkelGameButtonSkin implements libgdx.controls.button.ButtonSkin {
 
+    GAME_RED(null, null, null, null, null),
+    GAME_BLUE(null, null, null, null, null),
+    GAME_GREEN(null, null, null, null, null),
+    GAME_YELLOW(null, null, null, null, null),
+    GAME_AQUA(null, null, null, null, null),
+    GAME_MOV(null, null, null, null, null),
+    GAME_BLACK(null, null, null, null, null),
+    GAME_WHITE(null, null, null, null, null),
+    GAME_BOMB(null, null, null, null, null),
+    BOMBED_CELL(null, null, null, null, null),
+
     ;
 
     SkelGameButtonSkin(Res imgUp, Res imgDown, Res imgChecked, Res imgDisabled, Color buttonDisabledFontColor) {
