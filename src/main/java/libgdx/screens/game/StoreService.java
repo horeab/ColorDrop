@@ -1,0 +1,48 @@
+package libgdx.screens.game;
+
+import libgdx.preferences.PreferencesService;
+
+
+public class StoreService {
+
+    private static String SHARED_PREFS_NAME = "ColorDropStore";
+
+    private PreferencesService preferencesService = new PreferencesService(SHARED_PREFS_NAME);
+
+    private static String GAMES_PLAYED = "GAMES_PLAYED";
+    private static String RECORD_SCORE = "RECORD_SCORE";
+    private static String SOUND_ON = "SOUND_ON";
+
+
+    public int getGamesPlayed() {
+        return preferencesService.getPreferences().getInteger(GAMES_PLAYED, 0);
+    }
+
+    public int getRecordScore() {
+        return preferencesService.getPreferences().getInteger(RECORD_SCORE, 0);
+    }
+
+    public boolean isSoundOn() {
+        return preferencesService.getPreferences().getBoolean(SOUND_ON, true);
+    }
+
+    public void putSoundOn(boolean soundOn) {
+        putValue(SOUND_ON, soundOn);
+    }
+
+    public void incrementGamesPlayed() {
+        putValue(GAMES_PLAYED, getGamesPlayed() + 1);
+    }
+
+    public void putRecordScore(int score) {
+        putValue(RECORD_SCORE, score);
+    }
+
+    private void putValue(String fieldName, boolean value) {
+        preferencesService.putBoolean(fieldName, value);
+    }
+
+    private void putValue(String fieldName, int value) {
+        preferencesService.putInteger(fieldName, value);
+    }
+}

@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+
 import libgdx.controls.ScreenRunnable;
 import libgdx.controls.button.ButtonSkin;
 import libgdx.controls.button.MyButton;
@@ -25,17 +26,15 @@ import java.util.Set;
 public class MainMenuScreen extends AbstractScreen {
 
     private Map<Integer, MyButton> gameButtons = new HashMap<>();
+    private CurrentGame currentGame = new CurrentGame();
+    private StoreService storeService = new StoreService();
+
 
     @Override
     public void buildStage() {
         new SkelGameRatingService(this).appLaunched();
         setUp();
     }
-
-    CurrentGame currentGame = new CurrentGame();
-
-    GameAllTime allTime = new GameAllTime();
-
 
     private void setUp() {
         Util.processLevelChange(currentGame);
@@ -50,20 +49,9 @@ public class MainMenuScreen extends AbstractScreen {
             Util.processLevelChange(currentGame);
             currentGame.setBombFound(previousBombState);
             goToNextLevel();
-        } else
-            // GAME OVER
-            if (!GameService.thereArePossibilities(matrix) || currentGame.getMovesLeft() <= 0) {
-                processHighScore();
-                if (allTime.getHighScore() < currentGame.getLevel()) {
-                } else {
-                }
-                MyButton gameOverButton = null;
-                gameOverButton.addListener(new ClickListener() {
-                    @Override
-                    public void clicked(InputEvent event, float x, float y) {
-                    }
-                });
-            }
+        } else if (isGameOver(matrix)) {
+            processGameOver();
+        }
         //////////////
 
         Table gameTable = new Table();
@@ -99,6 +87,23 @@ public class MainMenuScreen extends AbstractScreen {
         }
     }
 
+    private boolean isGameOver(int[][] matrix) {
+        return !GameService.thereArePossibilities(matrix) || currentGame.getMovesLeft() <= 0;
+    }
+
+    private void processGameOver() {
+        storeService.incrementGamesPlayed();
+        if (storeService.getRecordScore() < currentGame.getLevel()) {
+            storeService.putRecordScore(currentGame.getLevel());
+        }
+        MyButton gameOverButton = null;
+        gameOverButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+            }
+        });
+    }
+
     private void goToNextLevel() {
         MyButton nextLevelButton = null;
         nextLevelButton.addListener(new ClickListener() {
@@ -109,14 +114,6 @@ public class MainMenuScreen extends AbstractScreen {
                 setLettersKeyboard(currentGame.getCurrentMatrix());
             }
         });
-    }
-
-    private void processHighScore() {
-        if (allTime.getHighScore() < currentGame.getLevel()) {
-            dbUtil.saveSaveScore(currentGame.getLevel(), allTime.getGamesPlayed() + 1, this);
-        } else {
-            dbUtil.saveSaveScore(allTime.getHighScore(), allTime.getGamesPlayed() + 1, this);
-        }
     }
 
     private void colorBombedNeighbours(Set<Coordonate> neigboursToBomb) {
