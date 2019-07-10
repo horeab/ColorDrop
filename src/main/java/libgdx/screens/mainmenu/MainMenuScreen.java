@@ -2,13 +2,17 @@ package libgdx.screens.mainmenu;
 
 import com.badlogic.gdx.Gdx;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 
 import libgdx.controls.ScreenRunnable;
 import libgdx.controls.button.ButtonBuilder;
@@ -18,8 +22,10 @@ import libgdx.controls.button.MyButton;
 import libgdx.implementations.iq.SkelGameButtonSize;
 import libgdx.implementations.iq.SkelGameButtonSkin;
 import libgdx.implementations.iq.SkelGameRatingService;
+import libgdx.resources.dimen.MainDimen;
 import libgdx.screens.AbstractScreen;
 import libgdx.screens.game.*;
+import libgdx.utils.ScreenDimensionsManager;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -69,10 +75,27 @@ public class MainMenuScreen extends AbstractScreen {
                 if (matrix[i][nr] == Util.BOMB_BUTTON_MATRIX_CODE) {
                     currentGame.setBombButtonId(position);
                 }
+                final Coordonate coordonate = new Coordonate(finalNr, finalI, matrix[finalI][finalNr]);
+                final Set<Coordonate> pattern = new HashSet<Coordonate>();
+                if (coordonate.getValue() != Util.BOMB_BUTTON_MATRIX_CODE) {
+                    pattern.addAll(GameService.getSameColorCoordNeighbors(currentGame.getCurrentMatrix(), coordonate, new HashSet<>(), new HashSet<>()));
+                }
+                myButton.addListener(new InputListener() {
+                    @Override
+                    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                        colorNeighbours(pattern, true);
+                        return true;
+                    }
+
+                    @Override
+                    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                        colorNeighbours(pattern, false);
+                    }
+                });
                 myButton.addListener(new ClickListener() {
                     @Override
                     public void clicked(InputEvent event, float x, float y) {
-                        hidePatternButtons(new Coordonate(finalNr, finalI, matrix[finalI][finalNr]));
+                        hidePatternButtons(coordonate);
                         if (currentGame.getGameType().equals(GameTypeEnum.UNLIMITED)) {
                             Util.processLevelChange(currentGame);
                         }
@@ -82,12 +105,16 @@ public class MainMenuScreen extends AbstractScreen {
                 if (matrix[i][nr] == Util.HIDE_BUTTON_MATRIX_CODE) {
                     myButton.setVisible(false);
                 }
-                gameTable.add(myButton);
+                gameTable.add(myButton).height(myButton.getHeight()).width(myButton.getWidth()).pad(MainDimen.horizontal_general_margin.getDimen() / 4);
                 position++;
             }
             gameTable.row();
             i++;
         }
+        gameTable.setWidth(ScreenDimensionsManager.getScreenWidth());
+        gameTable.setHeight(ScreenDimensionsManager.getScreenHeight());
+        gameTable.setX(0);
+        addActor(gameTable);
     }
 
     private boolean isGameOver(int[][] matrix) {
@@ -126,15 +153,11 @@ public class MainMenuScreen extends AbstractScreen {
         }
     }
 
-    private void colorNeighbours(Set<Coordonate> neigbours) {
+    private void colorNeighbours(Set<Coordonate> neigbours, boolean skinForTouchDown) {
         for (Coordonate cell : neigbours) {
             MyButton button = getLayoutButton(cell);
-            button.setButtonSkin(getPressedButtonSkin());
+            button.setButtonSkin(skinForTouchDown ? ColorUtil.getPressedButtonSkinForValue(cell.getValue()) : ColorUtil.getButtonSkinForValue(cell.getValue()));
         }
-    }
-
-    private ButtonSkin getPressedButtonSkin() {
-        return null;
     }
 
     private void hidePatternButtons(Coordonate coord) {
@@ -145,7 +168,7 @@ public class MainMenuScreen extends AbstractScreen {
             pattern = GameService.getSameColorCoordNeighbors(currentGame.getCurrentMatrix(), coord, searched, found);
             processClearedBlocksStats(pattern.size());
             enableAllGameButtons(false);
-            colorNeighbours(pattern);
+            colorNeighbours(pattern, true);
             final Set<Coordonate> finalPattern = pattern;
             delayAction(new ScreenRunnable(this) {
                 @Override

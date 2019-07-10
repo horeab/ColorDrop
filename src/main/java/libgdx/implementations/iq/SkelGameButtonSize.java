@@ -4,7 +4,7 @@ import libgdx.resources.dimen.MainDimen;
 
 public enum SkelGameButtonSize implements libgdx.controls.button.ButtonSize {
 
-    GAME_BUTTON_SIZE(MainDimen.horizontal_general_margin.getDimen() * 8f, MainDimen.horizontal_general_margin.getDimen() * 8f),;
+    GAME_BUTTON_SIZE(MainDimen.horizontal_general_margin.getDimen() * 6.4f, MainDimen.horizontal_general_margin.getDimen() * 6.4f),;
 
     private float width;
     private float height;

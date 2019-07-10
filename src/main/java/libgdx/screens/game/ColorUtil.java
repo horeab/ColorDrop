@@ -6,7 +6,7 @@ import libgdx.implementations.iq.SkelGameButtonSkin;
 
 public class ColorUtil {
 
-    public static ButtonSkin getButtonSkinForValue(int value) {
+    public static SkelGameButtonSkin getButtonSkinForValue(int value) {
         switch (value) {
             case 0:
                 return SkelGameButtonSkin.GAME_RED;
@@ -27,6 +27,11 @@ public class ColorUtil {
             default:
                 return SkelGameButtonSkin.GAME_WHITE;
         }
+    }
+
+    public static ButtonSkin getPressedButtonSkinForValue(int value) {
+        SkelGameButtonSkin skin = getButtonSkinForValue(value);
+        return SkelGameButtonSkin.valueOf(skin.name() + "_PRESSED");
     }
 
     public static void colorButton(final MyButton button, final int cellValue) {
