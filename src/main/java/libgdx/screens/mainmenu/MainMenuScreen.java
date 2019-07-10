@@ -11,8 +11,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 import libgdx.controls.ScreenRunnable;
+import libgdx.controls.button.ButtonBuilder;
 import libgdx.controls.button.ButtonSkin;
+import libgdx.controls.button.MainButtonSkin;
 import libgdx.controls.button.MyButton;
+import libgdx.implementations.iq.SkelGameButtonSize;
 import libgdx.implementations.iq.SkelGameButtonSkin;
 import libgdx.implementations.iq.SkelGameRatingService;
 import libgdx.screens.AbstractScreen;
@@ -61,7 +64,7 @@ public class MainMenuScreen extends AbstractScreen {
             for (int nr = 0; nr < matrix[0].length; nr++) {
                 final int finalNr = nr;
                 final int finalI = i;
-                MyButton myButton = null;
+                MyButton myButton = new ButtonBuilder("").setButtonSkin(MainButtonSkin.DEFAULT).setFixedButtonSize(SkelGameButtonSize.GAME_BUTTON_SIZE).build();
                 gameButtons.put(position, myButton);
                 if (matrix[i][nr] == Util.BOMB_BUTTON_MATRIX_CODE) {
                     currentGame.setBombButtonId(position);
