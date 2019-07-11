@@ -1,5 +1,7 @@
 package libgdx.screens.game;
 
+import java.util.Objects;
+
 public class Coordonate {
 
 	private int x;
@@ -43,5 +45,20 @@ public class Coordonate {
 	public CoordNeighbors getNeighbors(int[][] matrix) {
 		this.neighbors = new CoordNeighbors(this, matrix);
 		return neighbors;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Coordonate that = (Coordonate) o;
+		return x == that.x &&
+				y == that.y;
+	}
+
+	@Override
+	public int hashCode() {
+
+		return Objects.hash(x, y);
 	}
 }

@@ -4,7 +4,7 @@ import java.util.Random;
 
 public class Util {
 
-	final static int GAME_COLUMNS = 7;
+	public final static int GAME_COLUMNS = 7;
 	final static int GAME_ROWS = 9;
 	private final static int BOMBS_PER_LEVEL = 1;
 
