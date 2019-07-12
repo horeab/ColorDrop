@@ -1,5 +1,6 @@
 package libgdx.implementations.iq;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.I18NBundle;
 
@@ -31,6 +32,10 @@ public enum SkelGameSpecificResource implements SpecificResource {
     game_yellow_down("buttons/game_yellow_down.png", Texture.class),
     game_yellow_up("buttons/game_yellow_up.png", Texture.class),
     game_explosion("buttons/game_explosion.png", Texture.class),
+    bombclick("sounds/bombclick.mp3", Sound.class),
+    colorclick("sounds/colorclick.mp3", Sound.class),
+    finishlevel("sounds/finishlevel.mp3", Sound.class),
+    gameover("sounds/gameover.mp3", Sound.class),
 
     ;
     // @formatter:on

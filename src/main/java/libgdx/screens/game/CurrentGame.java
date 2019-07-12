@@ -15,10 +15,7 @@ public class CurrentGame {
     private int movesLeft;
     private int blocksLeft;
 
-    private boolean volumeOn;
-
     public CurrentGame() {
-        this.setVolumeOn(true);
         this.level = 0;
         this.score = 0;
         this.levelBlocksCleared = 0;
@@ -106,14 +103,6 @@ public class CurrentGame {
 
     public void setBlocksLeft(int blocksLeft) {
         this.blocksLeft = blocksLeft;
-    }
-
-    public boolean isVolumeOn() {
-        return volumeOn;
-    }
-
-    public void setVolumeOn(boolean volumeOn) {
-        this.volumeOn = volumeOn;
     }
 
     public boolean isBombFound() {

@@ -22,14 +22,6 @@ public class StoreService {
         return preferencesService.getPreferences().getInteger(RECORD_SCORE, 0);
     }
 
-    public boolean isSoundOn() {
-        return preferencesService.getPreferences().getBoolean(SOUND_ON, true);
-    }
-
-    public void putSoundOn(boolean soundOn) {
-        putValue(SOUND_ON, soundOn);
-    }
-
     public void incrementGamesPlayed() {
         putValue(GAMES_PLAYED, getGamesPlayed() + 1);
     }

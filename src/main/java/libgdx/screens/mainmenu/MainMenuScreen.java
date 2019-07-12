@@ -2,12 +2,14 @@ package libgdx.screens.mainmenu;
 
 import com.badlogic.gdx.Gdx;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
@@ -15,6 +17,7 @@ import libgdx.controls.ScreenRunnable;
 import libgdx.controls.button.ButtonBuilder;
 import libgdx.controls.button.MainButtonSkin;
 import libgdx.controls.button.MyButton;
+import libgdx.controls.button.builders.SoundIconButtonBuilder;
 import libgdx.controls.label.MyWrappedLabel;
 import libgdx.controls.label.MyWrappedLabelConfigBuilder;
 import libgdx.controls.popup.MyPopup;
@@ -22,6 +25,8 @@ import libgdx.graphics.GraphicUtils;
 import libgdx.implementations.iq.SkelGameButtonSize;
 import libgdx.implementations.iq.SkelGameButtonSkin;
 import libgdx.implementations.iq.SkelGameRatingService;
+import libgdx.implementations.iq.SkelGameSpecificResource;
+import libgdx.preferences.SettingsService;
 import libgdx.resources.FontManager;
 import libgdx.resources.MainResource;
 import libgdx.resources.dimen.MainDimen;
@@ -29,6 +34,7 @@ import libgdx.screens.AbstractScreen;
 import libgdx.screens.game.*;
 import libgdx.utils.ActorPositionManager;
 import libgdx.utils.ScreenDimensionsManager;
+import libgdx.utils.SoundUtils;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -42,6 +48,7 @@ public class MainMenuScreen extends AbstractScreen {
     private CurrentGame currentGame = new CurrentGame();
     private StoreService storeService = new StoreService();
     private MyPopup gameOverPopup;
+    private String gameOverText;
 
 
     @Override
@@ -63,9 +70,11 @@ public class MainMenuScreen extends AbstractScreen {
 
         // SUCCESS LEVEL
         if (currentGame.getBlocksLeft() <= 0) {
+            SoundUtils.playSound(SkelGameSpecificResource.finishlevel);
             goToNextLevel();
             return;
-        } else if (isGameOver(matrix)) {
+        } else if (!GameService.thereArePossibilities(matrix) || isGameOver(matrix)) {
+            SoundUtils.playSound(SkelGameSpecificResource.gameover);
             processGameOver();
         }
         //////////////
@@ -136,7 +145,7 @@ public class MainMenuScreen extends AbstractScreen {
                 .padLeft(dimen)
                 .align(Align.left);
         table.add().growX();
-        table.add(GraphicUtils.getImage(MainResource.btn_settings_up))
+        table.add(new SoundIconButtonBuilder().createSoundButton())
                 .width(SkelGameButtonSize.SOUND_BUTTON_SIZE.getWidth()).height(SkelGameButtonSize.SOUND_BUTTON_SIZE.getHeight())
                 .padRight(dimen)
                 .align(Align.right)
@@ -167,12 +176,14 @@ public class MainMenuScreen extends AbstractScreen {
     }
 
     private void processGameOver() {
-        gameOverPopup = createGameOverPopup();
-        gameOverPopup.addToPopupManager();
         storeService.incrementGamesPlayed();
+        gameOverText = "Score: " + currentGame.getLevel();
         if (storeService.getRecordScore() < currentGame.getLevel()) {
             storeService.putRecordScore(currentGame.getLevel());
+            gameOverText = "Congratulations!\nYou set a new record!\n\nScore : " + currentGame.getLevel();
         }
+        gameOverPopup = createGameOverPopup();
+        gameOverPopup.addToPopupManager();
     }
 
     private void goToNextLevel() {
@@ -201,7 +212,7 @@ public class MainMenuScreen extends AbstractScreen {
 
             @Override
             protected String getLabelText() {
-                return "";
+                return gameOverText;
             }
 
             @Override
@@ -230,6 +241,7 @@ public class MainMenuScreen extends AbstractScreen {
         Set<Coordonate> found = new HashSet<Coordonate>();
         Set<Coordonate> pattern = new HashSet<Coordonate>();
         if (coord.getValue() != Util.BOMB_BUTTON_MATRIX_CODE) {
+            SoundUtils.playSound(SkelGameSpecificResource.colorclick);
             pattern = GameService.getSameColorCoordNeighbors(currentGame.getCurrentMatrix(), coord, searched, found);
             processClearedBlocksStats(pattern.size());
             enableAllGameButtons(false);
@@ -245,6 +257,7 @@ public class MainMenuScreen extends AbstractScreen {
             processClick(pattern.size());
 
         } else {
+            SoundUtils.playSound(SkelGameSpecificResource.bombclick);
             pattern = GameService.getBombNeighbors(coord, currentGame.getCurrentMatrix());
             processClearedBlocksStats(pattern.size());
             enableAllGameButtons(false);
