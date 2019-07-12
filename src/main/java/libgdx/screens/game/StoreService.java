@@ -11,7 +11,6 @@ public class StoreService {
 
     private static String GAMES_PLAYED = "GAMES_PLAYED";
     private static String RECORD_SCORE = "RECORD_SCORE";
-    private static String SOUND_ON = "SOUND_ON";
 
 
     public int getGamesPlayed() {

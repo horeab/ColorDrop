@@ -25,12 +25,12 @@ public class StartGame {
 
                     @Override
                     public String getAppName() {
-                        return "Crossword Garden";
+                        return "Color Drop";
                     }
 
                     @Override
                     public String getLanguage() {
-                        return "ro";
+                        return "da";
                     }
                 });
         libgdx.utils.startgame.StartGame.main(game, args);

@@ -6,7 +6,12 @@ import libgdx.resources.gamelabel.SpecificPropertiesUtils;
 
 public enum SkelGameLabel implements libgdx.resources.gamelabel.GameLabel {
 
-    ;
+    level,
+    level_record,
+    score,
+    score_record,
+    destroy_info,
+    new_game,;
 
     @Override
     public String getText(Object... params) {

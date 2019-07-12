@@ -24,6 +24,7 @@ import libgdx.controls.popup.MyPopup;
 import libgdx.graphics.GraphicUtils;
 import libgdx.implementations.iq.SkelGameButtonSize;
 import libgdx.implementations.iq.SkelGameButtonSkin;
+import libgdx.implementations.iq.SkelGameLabel;
 import libgdx.implementations.iq.SkelGameRatingService;
 import libgdx.implementations.iq.SkelGameSpecificResource;
 import libgdx.preferences.SettingsService;
@@ -138,7 +139,7 @@ public class MainMenuScreen extends AbstractScreen {
         Table table = new Table();
         float dimen = MainDimen.horizontal_general_margin.getDimen();
         table.add(new MyWrappedLabel(new MyWrappedLabelConfigBuilder()
-                .setText("Top Level " + (storeService.getRecordScore()))
+                .setText(SkelGameLabel.level_record.getText(storeService.getRecordScore()))
                 .setFontScale(FontManager.getSmallFontDim())
                 .setSingleLineLabel()
                 .build()))
@@ -153,7 +154,7 @@ public class MainMenuScreen extends AbstractScreen {
         table.add().growY().row();
 
         table.add(new MyWrappedLabel(new MyWrappedLabelConfigBuilder()
-                .setText("Level " + currentGame.getLevel())
+                .setText(SkelGameLabel.level.getText(currentGame.getLevel()))
                 .setFontScale(FontManager.getBigFontDim())
                 .setSingleLineLabel()
                 .build()))
@@ -177,10 +178,10 @@ public class MainMenuScreen extends AbstractScreen {
 
     private void processGameOver() {
         storeService.incrementGamesPlayed();
-        gameOverText = "Score: " + currentGame.getLevel();
+        gameOverText = SkelGameLabel.score.getText(currentGame.getLevel());
         if (storeService.getRecordScore() < currentGame.getLevel()) {
             storeService.putRecordScore(currentGame.getLevel());
-            gameOverText = "Congratulations!\nYou set a new record!\n\nScore : " + currentGame.getLevel();
+            gameOverText = SkelGameLabel.score_record.getText(currentGame.getLevel());
         }
         gameOverPopup = createGameOverPopup();
         gameOverPopup.addToPopupManager();
@@ -198,7 +199,7 @@ public class MainMenuScreen extends AbstractScreen {
         return new MyPopup(this) {
             @Override
             protected void addButtons() {
-                MyButton nextLevelButton = new ButtonBuilder("New Game").setButtonSkin(MainButtonSkin.DEFAULT).build();
+                MyButton nextLevelButton = new ButtonBuilder(SkelGameLabel.new_game.getText()).setButtonSkin(MainButtonSkin.DEFAULT).build();
                 nextLevelButton.addListener(new ClickListener() {
                     public void clicked(InputEvent event, float x, float y) {
                         gameOverPopup.hide();

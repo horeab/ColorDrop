@@ -15,13 +15,13 @@ public class ColorUtil {
             case 2:
                 return SkelGameButtonSkin.GAME_GREEN;
             case 3:
-                return SkelGameButtonSkin.GAME_YELLOW;
-            case 4:
-                return SkelGameButtonSkin.GAME_AQUA;
-            case 5:
                 return SkelGameButtonSkin.GAME_MOV;
-            case 6:
+            case 4:
                 return SkelGameButtonSkin.GAME_BLACK;
+            case 5:
+                return SkelGameButtonSkin.GAME_YELLOW;
+            case 6:
+                return SkelGameButtonSkin.GAME_AQUA;
             case Util.BOMB_BUTTON_MATRIX_CODE:
                 return SkelGameButtonSkin.GAME_BOMB;
             default:
