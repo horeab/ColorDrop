@@ -15,7 +15,7 @@ public class StartGame {
                 new DefaultAppInfoService() {
                     @Override
                     public String getGameIdPrefix() {
-                        return GameIdEnum.skelgame.name();
+                        return GameIdEnum.colordrop.name();
                     }
 
                     @Override

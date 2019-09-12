@@ -6,7 +6,7 @@ import libgdx.implementations.iq.SkelGameDependencyManager;
 
 public enum GameIdEnum implements GameId {
 
-    skelgame(SkelGameDependencyManager.class),;
+    colordrop(SkelGameDependencyManager.class),;
 
     private Class<? extends SubGameDependencyManager> dependencyManagerClass;
 
