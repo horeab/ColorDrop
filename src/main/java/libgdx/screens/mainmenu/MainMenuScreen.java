@@ -1,5 +1,6 @@
 package libgdx.screens.mainmenu;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -17,6 +18,7 @@ import libgdx.controls.ScreenRunnable;
 import libgdx.controls.button.ButtonBuilder;
 import libgdx.controls.button.MainButtonSkin;
 import libgdx.controls.button.MyButton;
+import libgdx.controls.button.builders.BackButtonBuilder;
 import libgdx.controls.button.builders.SoundIconButtonBuilder;
 import libgdx.controls.label.MyWrappedLabel;
 import libgdx.controls.label.MyWrappedLabelConfigBuilder;
@@ -138,6 +140,11 @@ public class MainMenuScreen extends AbstractScreen {
     private Table createHeaderTable() {
         Table table = new Table();
         float dimen = MainDimen.horizontal_general_margin.getDimen();
+        if (Gdx.app.getType() == Application.ApplicationType.iOS) {
+            table.add(new BackButtonBuilder().createScreenBackButton(this)).padRight(MainDimen.horizontal_general_margin.getDimen());
+        } else {
+            table.add();
+        }
         table.add(new MyWrappedLabel(new MyWrappedLabelConfigBuilder()
                 .setText(SkelGameLabel.level_record.getText(storeService.getRecordScore()))
                 .setFontScale(FontManager.getSmallFontDim())
@@ -159,7 +166,7 @@ public class MainMenuScreen extends AbstractScreen {
                 .setSingleLineLabel()
                 .build()))
                 .width(ScreenDimensionsManager.getScreenWidth())
-                .colspan(3)
+                .colspan(4)
                 .row();
         table.add(new MyWrappedLabel(new MyWrappedLabelConfigBuilder()
                 .setText(StatsService.getMovesAndBlocksLeftString(currentGame.getMovesLeft(), currentGame.getBlocksLeft()))
@@ -167,7 +174,7 @@ public class MainMenuScreen extends AbstractScreen {
                 .setSingleLineLabel()
                 .build()))
                 .width(ScreenDimensionsManager.getScreenWidth())
-                .colspan(3);
+                .colspan(4);
         table.add().growY().row();
         return table;
     }
