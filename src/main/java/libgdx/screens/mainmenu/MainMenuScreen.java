@@ -38,6 +38,7 @@ import libgdx.screens.game.*;
 import libgdx.utils.ActorPositionManager;
 import libgdx.utils.ScreenDimensionsManager;
 import libgdx.utils.SoundUtils;
+import libgdx.utils.Utils;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -322,6 +323,12 @@ public class MainMenuScreen extends AbstractScreen {
         }
         currentGame.setMovesLeft(movesLeft);
         currentGame.setBlocksLeft(blocksLeft);
+    }
+
+    @Override
+    public void render(float delta) {
+        super.render(delta);
+        Utils.createChangeLangPopup();
     }
 
     @Override

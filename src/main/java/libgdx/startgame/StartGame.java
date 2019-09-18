@@ -1,6 +1,7 @@
 package libgdx.startgame;
 
 import libgdx.constants.GameIdEnum;
+import libgdx.constants.Language;
 import libgdx.implementations.iq.SkelGame;
 import libgdx.utils.startgame.test.DefaultAppInfoService;
 import libgdx.utils.startgame.test.DefaultBillingService;
@@ -30,7 +31,7 @@ public class StartGame {
 
                     @Override
                     public String getLanguage() {
-                        return "da";
+                        return Language.en.name();
                     }
                 });
         libgdx.utils.startgame.StartGame.main(game, args);
