@@ -3,14 +3,12 @@ package libgdx.screens.mainmenu;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Gdx;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.RunnableAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 
@@ -23,15 +21,12 @@ import libgdx.controls.button.builders.SoundIconButtonBuilder;
 import libgdx.controls.label.MyWrappedLabel;
 import libgdx.controls.label.MyWrappedLabelConfigBuilder;
 import libgdx.controls.popup.MyPopup;
-import libgdx.graphics.GraphicUtils;
 import libgdx.implementations.iq.SkelGameButtonSize;
 import libgdx.implementations.iq.SkelGameButtonSkin;
 import libgdx.implementations.iq.SkelGameLabel;
 import libgdx.implementations.iq.SkelGameRatingService;
 import libgdx.implementations.iq.SkelGameSpecificResource;
-import libgdx.preferences.SettingsService;
 import libgdx.resources.FontManager;
-import libgdx.resources.MainResource;
 import libgdx.resources.dimen.MainDimen;
 import libgdx.screens.AbstractScreen;
 import libgdx.screens.game.*;
@@ -207,8 +202,8 @@ public class MainMenuScreen extends AbstractScreen {
         return new MyPopup(this) {
             @Override
             protected void addButtons() {
-                MyButton nextLevelButton = new ButtonBuilder(SkelGameLabel.new_game.getText()).setButtonSkin(MainButtonSkin.DEFAULT).build();
-                nextLevelButton.addListener(new ClickListener() {
+                MyButton newGame = new ButtonBuilder(SkelGameLabel.new_game.getText()).setButtonSkin(MainButtonSkin.DEFAULT).build();
+                newGame.addListener(new ClickListener() {
                     public void clicked(InputEvent event, float x, float y) {
                         gameOverPopup.hide();
                         currentGame = new CurrentGame();
@@ -216,12 +211,17 @@ public class MainMenuScreen extends AbstractScreen {
                         setUp();
                     }
                 });
-                addButton(nextLevelButton);
+                addButton(newGame);
             }
 
             @Override
             protected String getLabelText() {
                 return gameOverText;
+            }
+
+            @Override
+            public void hide() {
+                Gdx.app.exit();
             }
 
             @Override
@@ -262,7 +262,7 @@ public class MainMenuScreen extends AbstractScreen {
                     clearButtonsAfterClick(finalPattern);
                     enableAllGameButtons(true);
                 }
-            });
+            }, 0.5f);
             processClick(pattern.size());
 
         } else {
@@ -278,16 +278,16 @@ public class MainMenuScreen extends AbstractScreen {
                     clearButtonsAfterClick(finalPattern);
                     enableAllGameButtons(true);
                 }
-            });
+            }, 0.5f);
             currentGame.setBombFound(true);
             processClick(pattern.size() - 1);
         }
     }
 
-    private void delayAction(Runnable runnable) {
+    private void delayAction(Runnable runnable, float duration) {
         RunnableAction action = new RunnableAction();
         action.setRunnable(runnable);
-        addAction(Actions.sequence(Actions.delay(0.5f), action));
+        addAction(Actions.sequence(Actions.delay(duration), action));
     }
 
     private void clearButtonsAfterClick(Set<Coordonate> pattern) {
