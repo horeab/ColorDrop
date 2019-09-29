@@ -66,6 +66,7 @@ public class MainMenuScreen extends AbstractScreen {
     private void createGameMatrix(final int[][] matrix) {
         Table gameTable = new Table();
         gameTable.setName(GAME_TABLE_NAME);
+        gameTable.setVisible(false);
         addActor(gameTable);
 
         // SUCCESS LEVEL
@@ -132,6 +133,7 @@ public class MainMenuScreen extends AbstractScreen {
         gameTable.setHeight(ScreenDimensionsManager.getScreenHeight());
         gameTable.setX(0);
         ActorPositionManager.setActorCenterScreen(gameTable);
+        gameTable.setVisible(true);
     }
 
     private Table createHeaderTable() {
@@ -192,7 +194,7 @@ public class MainMenuScreen extends AbstractScreen {
     }
 
     private void goToNextLevel() {
-        if (currentGame.getLevel() == 2 || (currentGame.getLevel() > 2 && currentGame.getLevel() % 3 == 0)) {
+        if (currentGame.getLevel() == 2 || (currentGame.getLevel() > 3 && currentGame.getLevel() % 3 == 0)) {
             Game.getInstance().getAppInfoService().showPopupAd(new Runnable() {
                 @Override
                 public void run() {
