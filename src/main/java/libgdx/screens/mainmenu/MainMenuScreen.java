@@ -21,6 +21,7 @@ import libgdx.controls.button.builders.SoundIconButtonBuilder;
 import libgdx.controls.label.MyWrappedLabel;
 import libgdx.controls.label.MyWrappedLabelConfigBuilder;
 import libgdx.controls.popup.MyPopup;
+import libgdx.game.Game;
 import libgdx.implementations.iq.SkelGameButtonSize;
 import libgdx.implementations.iq.SkelGameButtonSkin;
 import libgdx.implementations.iq.SkelGameLabel;
@@ -191,7 +192,20 @@ public class MainMenuScreen extends AbstractScreen {
     }
 
     private void goToNextLevel() {
-        gameButtons.clear();
+        if (currentGame.getLevel() == 1 || (currentGame.getLevel() > 1 && currentGame.getLevel() % 3 == 0)) {
+            Game.getInstance().getAppInfoService().showPopupAd(new Runnable() {
+                @Override
+                public void run() {
+                    gameButtons.clear();
+                    createNewLevel();
+                }
+            });
+        } else {
+            createNewLevel();
+        }
+    }
+
+    private void createNewLevel() {
         Util.processLevelChange(currentGame);
         currentGame.setCurrentMatrix(Util.generateRandomMatrix(currentGame.getNrColors()));
         removeGameTable();
@@ -220,7 +234,7 @@ public class MainMenuScreen extends AbstractScreen {
             }
 
             @Override
-            public void hide() {
+            public void onBackKeyPress() {
                 Gdx.app.exit();
             }
 
