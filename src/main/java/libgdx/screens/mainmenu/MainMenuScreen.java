@@ -192,7 +192,7 @@ public class MainMenuScreen extends AbstractScreen {
     }
 
     private void goToNextLevel() {
-        if (currentGame.getLevel() == 1 || (currentGame.getLevel() > 1 && currentGame.getLevel() % 3 == 0)) {
+        if (currentGame.getLevel() == 2 || (currentGame.getLevel() > 2 && currentGame.getLevel() % 3 == 0)) {
             Game.getInstance().getAppInfoService().showPopupAd(new Runnable() {
                 @Override
                 public void run() {
